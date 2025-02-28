@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.gradle</groupId>
+    <artifactId>gradle-platforms</artifactId>
+    <version>8.11</version>
+  </parent>
+  <artifactId>gradle-core-execution</artifactId>
+  <packaging>pom</packaging>
+  <modules>
+    <module>build-cache</module>
+    <module>worker-main</module>
+    <module>build-cache-example-client</module>
+    <module>build-cache-http</module>
+    <module>workers</module>
+    <module>execution</module>
+    <module>execution-e2e-tests</module>
+    <module>build-cache-local</module>
+    <module>persistent-cache</module>
+    <module>hashing</module>
+    <module>file-watching</module>
+    <module>snapshots</module>
+    <module>build-cache-base</module>
+    <module>build-cache-spi</module>
+    <module>build-cache-packaging</module>
+  </modules>
+</project>

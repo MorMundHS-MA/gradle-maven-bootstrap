@@ -1,0 +1,5 @@
+Class-Path-Source: manifestClasspath
+Class-Path: gradle-stdlib-java-extensions-8.11.jar gradle-build-process-
+ services-8.11.jar gradle-base-services-8.11.jar gradle-concurrent-8.11.
+ jar gradle-service-lookup-8.11.jar
+Main-Class: org.gradle.launcher.daemon.bootstrap.GradleDaemon
