@@ -1,0 +1,2 @@
+Class-Path-Source: manifestClasspath
+Class-Path: gradle-gradle-cli-main-8.11.jar

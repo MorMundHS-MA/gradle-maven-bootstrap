@@ -1,0 +1,29 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.gradle</groupId>
+    <artifactId>gradle-core-runtime</artifactId>
+    <version>8.11</version>
+  </parent>
+
+  <artifactId>gradle-internal-instrumentation-api</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.gradle</groupId>
+      <artifactId>gradle-distributions-dependencies</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>org.gradle</groupId>
+      <artifactId>gradle-stdlib-java-extensions</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.gradle</groupId>
+      <artifactId>gradle-base-asm</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+</project>

@@ -1,54 +1,27 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./images/gradle-white-primary.png" width="350px">
-  <img alt="Gradle" src="./images/gradle-dark-green-primary.png" width="350px">
-</picture>
+# Gradle bootstrap build with Maven
 
-[![Revved up by Develocity](https://img.shields.io/badge/Revved%20up%20by-Develocity-06A0CE?logo=Gradle&labelColor=02303A)](https://ge.gradle.org/scans)
-[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/4898/badge)](https://bestpractices.coreinfrastructure.org/projects/4898)
+*This is a fork of the [official gradle repository](https://github.com/gradle/gradle) and not affiliated with Gradle Inc. in any way.*
 
-[Gradle](https://gradle.org/) is a build tool with a focus on build automation and support for multi-language development. If you are building, testing, publishing, and deploying software on any platform, Gradle offers a flexible model that can support the entire development lifecycle from compiling and packaging code to publishing websites. Gradle has been designed to support build automation across multiple languages and platforms, including Java, Scala, Android, Kotlin, C/C++, and Groovy, and is closely integrated with development tools and continuous integration servers, including Eclipse, IntelliJ, and Jenkins.
+This repository contains the required files and modifications to allow Gradle to be built with only Maven. The goal is to prove the feasability of [bootstrapping Gradle](https://bootstrappable.org/projects/java-tools.html) this way and better estimate the effort required with this approach.
 
-**For more information, please visit the [official project homepage](https://gradle.org)**
+The script `./package.sh` contains the steps required to generate a functional distribution zip in `mvn-distribution/target/gradle-8.11-bin.zip`. This distribution can be used in Gradle builds by modifying the `gradle/wrapper/gradle-wrapper.properties` in a Gradle project to reference the build zip file instead. An example can be found in the [dockerfile](#dockerfile) in the repository root.
 
-## Getting Started
+## Caveats
 
-* [Installing Gradle](https://docs.gradle.org/current/userguide/installation.html)
-* [Building Android Apps](https://developer.android.com/training/basics/firstapp/)
-* [Building Java Applications](https://docs.gradle.org/current/samples/sample_building_java_applications.html)
-* [Building Java Libraries](https://docs.gradle.org/current/samples/sample_building_java_libraries.html)
-* [Building Groovy Applications](https://docs.gradle.org/current/samples/sample_building_groovy_applications.html)
-* [Building Groovy Libraries](https://docs.gradle.org/current/samples/sample_building_groovy_libraries.html)
-* [Building Scala Applications](https://docs.gradle.org/current/samples/sample_building_scala_applications.html)
-* [Building Scala Libraries](https://docs.gradle.org/current/samples/sample_building_scala_libraries.html)
-* [Building Kotlin JVM Applications](https://docs.gradle.org/current/samples/sample_building_kotlin_applications.html)
-* [Building Kotlin JVM Libraries](https://docs.gradle.org/current/samples/sample_building_kotlin_libraries.html)
-* [Building C++ Applications](https://docs.gradle.org/current/samples/sample_building_cpp_applications.html)
-* [Building C++ Libraries](https://docs.gradle.org/current/samples/sample_building_cpp_libraries.html)
-* [Building Swift Applications](https://docs.gradle.org/current/samples/sample_building_swift_applications.html)
-* [Building Swift Libraries](https://docs.gradle.org/current/samples/sample_building_swift_libraries.html)
-* [Creating Build Scans](https://scans.gradle.com/)
+This approach builds a valid Gradle distribution capable of building Gradle itself that is identical to a version build with an official Gradle distribution blob. However:
 
-## Stay in Flow
-Enjoy first-class Gradle support in your IDE of choice.
+1. Dependencies are downloaded as jars from public sources and some of these dependencies require Gradle to build (most notably Kotlin)
+2. The bootstrapped distribution can use the Gradle build cache to download artifacts instead of building them from source
+3. The bootstrapped distribution is not optimized and contains more dependencies than required for running the distribution. Fixing this is not in the scope of the project.
 
-* [Android Studio](https://developer.android.com/studio/build/index.html)
-* [Eclipse](https://www.vogella.com/tutorials/EclipseGradle/article.html)
-* [IntelliJ IDEA](https://www.jetbrains.com/help/idea/gradle.html)
-* [NetBeans](https://netbeans.apache.org)
-* [Visual Studio Code](https://code.visualstudio.com/docs/languages/java)
+## Dockerfile
 
-## Need Help?
+To ensure that the bootstrapped Gradle distribution is capable of building a valid Gradle distribution, the `dockerfile` is provided.
+It builds the bootstrapped distribution uses it to build Gradle `v8.11.0`. Finally when running the image, the distribution is compared to a `v8.11.0` distribution built with a Gradle distribution downloaded from Gradle.
 
-* Get familiar with the [Gradle User Manual](https://docs.gradle.org/current/userguide/userguide.html)
-* [Upcoming trainings](https://gradle.org/training/)
-* Ask on the [forum](https://discuss.gradle.org/) or [StackOverflow](https://stackoverflow.com/questions/tagged/gradle)
-* Have a look at the [Samples](https://docs.gradle.org/current/samples/index.html)
-* Checkout the [Community Resources](https://gradle.org/resources/) as well
-* Join our [Slack Channel](https://gradle.com/slack-invite)
-
-
-## Contributing
-
-If you're looking to contribute to Gradle or provide a patch/pull request, you can find more info [here](https://github.com/gradle/gradle/blob/master/CONTRIBUTING.md).
-
-This project adheres to the [Gradle Code of Conduct](https://gradle.org/conduct/). By participating, you are expected to uphold this code.
+To build the image run `docker build -t [name] .`, where name is the image name such a `gradle-maven-bootstrap-test`.
+To compare the distributions after the build run `docker run --rm [name]`. This will output the SHA1 of the two distributions:
+```
+SHA1 (bootstrapped.zip) = e5dad8180c41468a4da06a128842ea1fe802e308
+SHA1 (native.zip) = e5dad8180c41468a4da06a128842ea1fe802e308
+```

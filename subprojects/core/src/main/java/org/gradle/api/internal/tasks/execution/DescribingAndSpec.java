@@ -36,7 +36,7 @@ public class DescribingAndSpec<T> extends CompositeSpec<T> {
     private final AndSpec<T> specHolder;
 
     private DescribingAndSpec(AndSpec<T> specHolder) {
-        super(specHolder.getSpecs().toArray(Cast.uncheckedCast(new Spec[0])));
+        super(specHolder.getSpecs().toArray(new Spec[0]));
         this.specHolder = specHolder;
     }
 
